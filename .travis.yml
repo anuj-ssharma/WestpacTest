@@ -21,4 +21,4 @@ script:
   - whereis google-chrome-stable
   - google-chrome-stable --version
   - whereis chromedriver
-  - python -m unittest discover
+  - python -m unittest discover -v
