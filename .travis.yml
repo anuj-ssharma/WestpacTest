@@ -1,5 +1,11 @@
+language: python
+python:
+  - 3.8
 addons:
   chrome: stable
+before_install:
+  - python --version
+  - pip install -r requirements.txt
 install: # Install ChromeDriver (64bits; replace 64 with 32 for 32bits).
   - wget -N http://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
@@ -12,3 +18,4 @@ script:
   - whereis google-chrome-stable
   - google-chrome-stable --version
   - whereis chromedriver
+  - python -m unittest test\test_kiwisaver.py
