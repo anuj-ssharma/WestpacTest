@@ -25,5 +25,6 @@ TODO
 2. Clone the project `git clone https://github.com/anuj-ssharma/WestpacTest.git`
 3. Within the project, run `pip install -r requirements.txt`. 
     * if pip is not installed, install using the instructions at (https://pip.pypa.io/en/stable/installing/)
-4. Within the project directory, run `python -m unittest test\test_kiwisaver.py`
+4. Within the project directory, run `python -m unittest test\test_kiwisaver.py` to run all tests.
+    * To run a single test, run `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.<name_of_test_method>`, e.g., `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.test_calculation_for_employed`
  

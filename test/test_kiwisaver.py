@@ -1,3 +1,4 @@
+from datetime import datetime
 import unittest
 from parameterized import parameterized
 from selenium import webdriver
@@ -93,9 +94,16 @@ class KiwiSaverCalculator(unittest.TestCase):
 
     def tearDown(self) -> None:
         """
-        Close and Quit the driver once test completes
+        Take a full page screenshot if the test fails.
+        Finally close and Quit the driver.
         :return:
         """
+        for method, error in self._outcome.errors:
+            if error:
+                S = lambda X: self.driver.execute_script('return document.body.parentNode.scroll' + X)
+                self.driver.set_window_size(S('Width'), S('Height'))
+                filename = "{}-{}".format(self._testMethodName,datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
+                self.driver.find_element_by_tag_name('body').screenshot('screenshots/{}.png'.format(filename))
         self.driver.close()
         self.driver.quit()
 
