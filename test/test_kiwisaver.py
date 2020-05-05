@@ -1,6 +1,7 @@
 import unittest
 from parameterized import parameterized
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from pages.kiwisaver_calculator import KiwiSaverCalcPage, KSCalcPageElement
 
 class KiwiSaverCalculator(unittest.TestCase):
@@ -10,7 +11,13 @@ class KiwiSaverCalculator(unittest.TestCase):
         Validate that the correct page is loaded by verifying the title of the page.
         :return:
         """
-        self.driver = webdriver.Chrome()
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("disable-gpu")
+        self.driver = webdriver.Chrome(options=chrome_options)
+
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
         assert self.kiwisaver_calc_page.is_title_matches(), "Could not load Kiwisaver Calculator page"
@@ -39,7 +46,7 @@ class KiwiSaverCalculator(unittest.TestCase):
         if(test_name == "annual_income" or test_name == "member_contrib"):
             # The fields annual income and member contribution are only shown when the user selects
             # the 'Employed' status for Employment status.
-            KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown("Employed")
+            KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown_value("Employed")
 
         field = KSCalcPageElement(driver=self.driver, field_name=field_name)
         field.info_icon().click()
@@ -51,11 +58,11 @@ class KiwiSaverCalculator(unittest.TestCase):
                                                pir="17.5%", risk_profile="High")
         self.kiwisaver_calc_page.view_projections()
 
-        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-title").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, css_locator="span.result-title").element().text,
                          "At age 65, your KiwiSaver balance is estimated to be:")
-        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-value").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, css_locator="span.result-value").element().text,
                          "$\n279,558")
-        self.assertTrue(KSCalcPageElement(self.driver, locator="div.results-graph").has_element())
+        self.assertTrue(KSCalcPageElement(self.driver, css_locator="div.results-graph").has_element())
 
 
     def test_calcuation_for_self_employed(self):
@@ -64,11 +71,11 @@ class KiwiSaverCalculator(unittest.TestCase):
                                                risk_profile="Medium", savings_goal=290000)
         self.kiwisaver_calc_page.view_projections()
 
-        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-title").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, css_locator="span.result-title").element().text,
                          "At age 65, your KiwiSaver balance is estimated to be:")
-        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-value").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, css_locator="span.result-value").element().text,
                          "$\n212,440")
-        self.assertTrue(KSCalcPageElement(self.driver, locator="div.results-graph").has_element())
+        self.assertTrue(KSCalcPageElement(self.driver, css_locator="div.results-graph").has_element())
 
 
     def test_calculation_for_not_employed(self):
@@ -77,11 +84,11 @@ class KiwiSaverCalculator(unittest.TestCase):
                                                risk_profile="Medium", savings_goal=200000)
         self.kiwisaver_calc_page.view_projections()
 
-        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-title").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, css_locator="span.result-title").element().text,
                          "At age 65, your KiwiSaver balance is estimated to be:")
-        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-value").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, css_locator="span.result-value").element().text,
                          "$\n168,425")
-        self.assertTrue(KSCalcPageElement(self.driver, locator="div.results-graph").has_element())
+        self.assertTrue(KSCalcPageElement(self.driver, css_locator="div.results-graph").has_element())
 
 
     def tearDown(self) -> None:
