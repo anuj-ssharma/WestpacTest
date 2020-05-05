@@ -1,9 +1,17 @@
 # Overview
-* This repository contains the tests requested as part of the technical tests from Westpac NZ. 
-* The tests are defined in the `test/test_kiwisaver.py` file. There are a total of 12 tests when the suite is executed. 
-    * Setup Step - Loads the chrome driver and goes to the page under test.
-    * test_info_icons - Tests for the first user story. Please refer to the comments in the test
-    * Calculation tests - Please refer to the comments in the test
+* This repository contains the tests requested as part of the technical test from Westpac NZ. 
+* The tests are defined in the `test/test_kiwisaver.py`. There are a total of 12 tests when the suite is executed. 
+    * `setUp` Step - Loads the chrome driver and goes to the page under test.
+    * test_info_icons - Tests for the user story as follows:
+        > As a Product Owner
+          I want that while using the KiwiSaver Retirement Calculator all fields in the calculator have got the information icon present
+        So that
+        The user is able to get a clear understanding of what needs to be entered in the field .
+    * Kiwisaver calculation tests - Tests for the user story as follows:
+        >    As a Product Owner
+        I want that the KiwiSaver Retirement Calculator users are able to calculate what their KiwiSaver projected balance would be at retirement
+        So that
+        The users are able to plan their investments better.
         * test_calculation_employed
         * test_calculation_self_employed
         * test_calculation_not_employed

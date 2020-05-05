@@ -7,15 +7,15 @@ class KiwiSaverCalculator(unittest.TestCase):
     def setUp(self) -> None:
         """
         Load Chromedriver and go to the Kiwisaver calculator page.
-        Validate that the correct page is lpaded by verifying the title of the page.
+        Validate that the correct page is loaded by verifying the title of the page.
         :return:
         """
         self.driver = webdriver.Chrome()
-        self.ks_calc_page = KiwiSaverCalcPage(self.driver)
-        self.ks_calc_page.load()
-        assert self.ks_calc_page.is_title_matches(), "Could not load Kiwisaver Calculator page"
+        self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
+        self.kiwisaver_calc_page.load()
+        assert self.kiwisaver_calc_page.is_title_matches(), "Could not load Kiwisaver Calculator page"
         # Switch to the iframe that contains all the calculation fields.
-        self.ks_calc_page.switch_to_calculator()
+        self.kiwisaver_calc_page.switch_to_calculator()
 
 
     @parameterized.expand([
@@ -29,86 +29,59 @@ class KiwiSaverCalculator(unittest.TestCase):
     ["annual_income", "annual-income", "Only include your total annual income that is paid to you by your employer(s). Other income sources such as rental income or dividends should not be included."],
     ["member_contrib", "kiwisaver-member-contribution", "You can choose to contribute a regular amount equal to 3%, 4%, 6%, 8% or 10% of your before-tax salary or wage. If you do not select a rate, your rate will be 3%."]
     ])
-    def test_info_icons(self, test_name, field_name, field_info_text):
+    def test_info_icons(self, test_name, field_name, expected_field_info_text):
         """
-        This is testing the following user story:
-        As a Product Owner
-        I want that while using the KiwiSaver Retirement Calculator all fields in the calculator have got the information icon present
-        So that
-        The user is able to get a clear understanding of what needs to be entered in the field .
-
-        :param test_name: Name of the test, can be anything.
+        :param test_name: Name of the test that will be used for reporting purposes
         :param field_name: The field for which the info icon is being tested.
-        :param field_info_text: the text that needs to be validated when the user clicks on the info icon.
+        :param expected_field_info_text: the expected text to be displayed when the user clicks on the info icon.
         :return:
         """
         if(test_name == "annual_income" or test_name == "member_contrib"):
-            # To display these fields
-            KSCalcPageElement(driver=self.driver, locator="employment-status").select_dropdown("Employed")
-        element = KSCalcPageElement(driver=self.driver, locator=field_name)
-        element.info_button().click()
-        self.assertEqual(element.info_text(), field_info_text)
+            # The fields annual income and member contribution are only shown when the user selects
+            # the 'Employed' status for Employment status.
+            KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown("Employed")
 
-    def test_calculation_employed(self):
-        """
-        This is the testing the following user story for a person who is employed:
-        As a Product Owner
-        I want that the KiwiSaver Retirement Calculator users are able to calculate what their KiwiSaver projected balance would be at retirement
-        So that
-        The users are able to plan their investments better.
+        field = KSCalcPageElement(driver=self.driver, field_name=field_name)
+        field.info_icon().click()
+        self.assertEqual(field.info_text(), expected_field_info_text)
 
-        :return:
-        """
-        self.ks_calc_page.enter_details(current_age=30, emp_status="Employed", annual_income=82000, member_contrib="4%", pir="17.5%", risk_profile="High")
-        self.ks_calc_page.view_projections()
 
-        self.assertEqual(KSCalcPageElement(self.driver, "span.result-title").element().text,
+    def test_calculation_for_employed(self):
+        self.kiwisaver_calc_page.enter_details(current_age=30, emp_status="Employed", annual_income=82000, member_contrib="4%",
+                                               pir="17.5%", risk_profile="High")
+        self.kiwisaver_calc_page.view_projections()
+
+        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-title").element().text,
                          "At age 65, your KiwiSaver balance is estimated to be:")
-        self.assertEqual(KSCalcPageElement(self.driver, "span.result-value").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-value").element().text,
                          "$\n279,558")
-        self.assertTrue(KSCalcPageElement(self.driver, "div.results-graph").has_element())
+        self.assertTrue(KSCalcPageElement(self.driver, locator="div.results-graph").has_element())
 
-    def test_calcuation_self_employed(self):
-        """
-        This is the testing the following user story for a person who is self employed:
-        As a Product Owner
-        I want that the KiwiSaver Retirement Calculator users are able to calculate what their KiwiSaver projected balance would be at retirement
-        So that
-        The users are able to plan their investments better.
 
-        :return:
-        """
-        self.ks_calc_page.enter_details(current_age=45, emp_status="Self-employed", pir="10.5%", current_balance=100000,
-                                        vol_contribs_amount=90, vol_contribs_frequency="Fortnightly",
-                                        risk_profile="Medium", savings_goal=290000)
-        self.ks_calc_page.view_projections()
+    def test_calcuation_for_self_employed(self):
+        self.kiwisaver_calc_page.enter_details(current_age=45, emp_status="Self-employed", pir="10.5%", current_balance=100000,
+                                               vol_contribs_amount=90, vol_contribs_frequency="Fortnightly",
+                                               risk_profile="Medium", savings_goal=290000)
+        self.kiwisaver_calc_page.view_projections()
 
-        self.assertEqual(KSCalcPageElement(self.driver, "span.result-title").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-title").element().text,
                          "At age 65, your KiwiSaver balance is estimated to be:")
-        self.assertEqual(KSCalcPageElement(self.driver, "span.result-value").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-value").element().text,
                          "$\n212,440")
-        self.assertTrue(KSCalcPageElement(self.driver, "div.results-graph").has_element())
+        self.assertTrue(KSCalcPageElement(self.driver, locator="div.results-graph").has_element())
 
-    def test_calculation_not_employed(self):
-        """
-        This is the testing the following user story for a person who is not employed:
-        As a Product Owner
-        I want that the KiwiSaver Retirement Calculator users are able to calculate what their KiwiSaver projected balance would be at retirement
-        So that
-        The users are able to plan their investments better.
 
-        :return:
-        """
-        self.ks_calc_page.enter_details(current_age=55, emp_status="Not employed", pir="10.5%", current_balance=140000,
-                                        vol_contribs_amount=10, vol_contribs_frequency="Annually", risk_profile="Medium",
-                                        savings_goal=200000)
-        self.ks_calc_page.view_projections()
+    def test_calculation_for_not_employed(self):
+        self.kiwisaver_calc_page.enter_details(current_age=55, emp_status="Not employed", pir="10.5%", current_balance=140000,
+                                               vol_contribs_amount=10, vol_contribs_frequency="Annually",
+                                               risk_profile="Medium", savings_goal=200000)
+        self.kiwisaver_calc_page.view_projections()
 
-        self.assertEqual(KSCalcPageElement(self.driver, "span.result-title").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-title").element().text,
                          "At age 65, your KiwiSaver balance is estimated to be:")
-        self.assertEqual(KSCalcPageElement(self.driver, "span.result-value").element().text,
+        self.assertEqual(KSCalcPageElement(self.driver, locator="span.result-value").element().text,
                          "$\n168,425")
-        self.assertTrue(KSCalcPageElement(self.driver, "div.results-graph").has_element())
+        self.assertTrue(KSCalcPageElement(self.driver, locator="div.results-graph").has_element())
 
 
     def tearDown(self) -> None:
