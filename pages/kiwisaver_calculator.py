@@ -13,7 +13,8 @@ class KiwiSaverCalcPage():
         return "KiwiSaver Retirement Calculator - Westpac NZ" in self.driver.title
 
     def switch_to_calculator(self):
-        self.driver.switch_to.frame(self.driver.find_element_by_css_selector(".calculator-embed > iframe"))
+        iframe = KSCalcPageElement(driver=self.driver, locator=".calculator-embed > iframe").element()
+        self.driver.switch_to.frame(iframe)
 
     def enter_details(self, current_age, emp_status, pir, risk_profile, current_balance=None, vol_contribs_amount=None, vol_contribs_frequency=None, annual_income=None, member_contrib=None, savings_goal=None):
         KSCalcPageElement(driver=self.driver, field_name="current-age").set_field_value(current_age)
