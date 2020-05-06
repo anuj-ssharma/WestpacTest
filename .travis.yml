@@ -3,14 +3,15 @@ language: python
 python:
   - 3.8
 before_install:
-  - wget -N http://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_linux64.zip -P ~/
+  - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update
+  - wget -N http://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
   - rm ~/chromedriver_linux64.zip
-  - sudo mv -f ~/chromedriver /usr/local/share/
-  - sudo chmod +x /usr/local/share/chromedriver
-  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+  - sudo cp -f ~/chromedriver /usr/bin
+  - sudo chmod ugo+rx /usr/local/bin/chromedriver
   - sudo apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
-  - sudo apt-get -y install google-chrome-stable=81.0.4044.138-1
+  - sudo apt-get -y install google-chrome-stable
   - sudo apt-get -y install xvfb gtk2-engines-pixbuf
   - sudo apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
   - sudo apt-get -y install imagemagick x11-apps
