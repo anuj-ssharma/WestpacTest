@@ -66,6 +66,7 @@ class KiwiSaverCalculator(unittest.TestCase):
             KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown_value("Employed")
 
         field = KSCalcPageElement(driver=self.driver, field_name=field_name)
+        self.driver.implicitly_wait(3)
         field.info_icon().click()
         self.assertEqual(field.info_text(), expected_field_info_text)
 
