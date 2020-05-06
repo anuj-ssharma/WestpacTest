@@ -22,4 +22,4 @@ script:
   - whereis google-chrome-stable
   - google-chrome-stable --version
   - whereis chromedriver
-  - python -m unittest -v test.test_kiwisaver.KiwiSaverCalculator
+  - BROWSER=chrome python -m unittest -v test.test_kiwisaver.KiwiSaverCalculator
