@@ -1,6 +1,4 @@
-dist: xenial
-services:
-  - xvfb
+dist: trusty
 language: python
 python:
   - 3.8
@@ -17,7 +15,6 @@ install:
   - python --version
   - pip install -r requirements.txt
 script:
-  - xvfb-run --server-args="-screen 0 1280x1024x16" make test
   - set -e
   - whereis google-chrome-stable
   - google-chrome-stable --version
