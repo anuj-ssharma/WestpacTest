@@ -11,7 +11,7 @@ before_install:
   - sudo cp -f ~/chromedriver /usr/bin
   - sudo chmod ugo+rx /usr/bin/chromedriver
   - sudo apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
-  - sudo apt-get -y install google-chrome-stable
+  - sudo apt-get -y --allow-unauthenticated install google-chrome-stable
   - sudo apt-get -y install xvfb gtk2-engines-pixbuf
   - sudo apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
   - sudo apt-get -y install imagemagick x11-apps
