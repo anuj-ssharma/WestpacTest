@@ -3,11 +3,9 @@ sudo: required
 language: python
 python:
   - 3.8
-chrome: &chrome
-  addons:
-    apt:
-      packages:
-        - google-chrome-stable
+addons:
+  chrome: stable
+  firefox: latest
 before_install:
   - wget -N http://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
