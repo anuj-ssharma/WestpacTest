@@ -16,7 +16,7 @@ class KiwiSaverCalculator(unittest.TestCase):
         chrome_options = Options()
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("disable-gpu")
-        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver = webdriver.Chrome(executable_path="drivers/chromedriver.exe", options=chrome_options)
 
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
