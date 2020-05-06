@@ -22,9 +22,10 @@
 2. Clone the project `git clone https://github.com/anuj-ssharma/WestpacTest.git`
 3. Within the project root directory, run `pip install -r requirements.txt`. 
     * if pip is not installed, install using the instructions at (https://pip.pypa.io/en/stable/installing/)
-4. If chrome browser not already installed, install from https://www.google.com/chrome/. Ensure that the chrome browser is on major version 81
-    * For the purposes of this test, the chromedriver is within this repo itself in `drivers` directory. In the real world, this would be managed via a package manager.  
-4. Within the project directory, run `python -m unittest test\test_kiwisaver.py` to run all tests.
+4. If chrome browser is not already installed, install from https://www.google.com/chrome/. Ensure that the chrome browser is on major version 81  
+6. Within the project directory,
+    * To run on Chrome, run `set BROWSER=chrome` on the command line. To run on Firefox, run `set BROWSER=firefox`
+    * Run `python -m unittest test\test_kiwisaver.py` to run all tests.
     * To run a single test, run `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.<name_of_test_method>`, e.g., `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.test_calculation_for_employed`
     * In case of a test failure, screenshot of the full page will be saved to the `screenshots` directory.
     * By default, the tests will run in non-headless mode. 

@@ -1,23 +1,35 @@
 from datetime import datetime
+import os
+import sys
 import unittest
 from parameterized import parameterized
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FFOptions
 from pages.kiwisaver_calculator import KiwiSaverCalcPage, KSCalcPageElement
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 
 class KiwiSaverCalculator(unittest.TestCase):
+
     def setUp(self) -> None:
         """
-        Load Chromedriver and go to the Kiwisaver calculator page.
+        Load the relevant driver based on env var set and go to the Kiwisaver calculator page.
         Validate that the correct page is loaded by verifying the title of the page.
         :return:
         """
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+        browser = os.environ['BROWSER']
+        if browser == "chrome":
+            options = ChromeOptions()
+            exe = ChromeDriverManager().install()
+            self.driver = webdriver.Chrome(executable_path=exe, options=self.browser_options(options))
+        elif browser == "firefox":
+            options = FFOptions()
+            exe = GeckoDriverManager().install()
+            self.driver = webdriver.Firefox(executable_path=exe, options=self.browser_options(options))
+        else:
+            sys.stderr.write("\nPlease enter a valid value for BROWSER i.e. chrome or firefox\n")
+            sys.exit(1)
 
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
@@ -25,6 +37,9 @@ class KiwiSaverCalculator(unittest.TestCase):
         # Switch to the iframe that contains all the calculation fields.
         self.kiwisaver_calc_page.switch_to_calculator()
 
+    def browser_options(self, options):
+        options.add_argument("--no-sandbox")
+        options.add_argument("disable-gpu")
 
     @parameterized.expand([
     ["current_age", "current-age", "This calculator has an age limit of 84 years old."],
@@ -102,6 +117,8 @@ class KiwiSaverCalculator(unittest.TestCase):
             if error:
                 S = lambda X: self.driver.execute_script('return document.body.parentNode.scroll' + X)
                 self.driver.set_window_size(S('Width'), S('Height'))
+                if not os.path.exists("screenshots"):
+                    os.makedirs("screenshots")
                 filename = "{}-{}".format(self._testMethodName,datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
                 self.driver.find_element_by_tag_name('body').screenshot('screenshots/{}.png'.format(filename))
         self.driver.close()
