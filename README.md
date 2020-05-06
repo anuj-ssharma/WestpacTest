@@ -16,15 +16,14 @@
         * test_calculation_self_employed
         * test_calculation_not_employed
 
-# Test Execution (Travis CI)
-TODO
+# Running tests locally (Windows x64)
 
-# Running tests locally
-
-1. Install Python 3.8
+1. Install Python 3.8 from https://www.python.org/downloads/
 2. Clone the project `git clone https://github.com/anuj-ssharma/WestpacTest.git`
-3. Within the project, run `pip install -r requirements.txt`. 
+3. Within the project root directory, run `pip install -r requirements.txt`. 
     * if pip is not installed, install using the instructions at (https://pip.pypa.io/en/stable/installing/)
 4. Within the project directory, run `python -m unittest test\test_kiwisaver.py` to run all tests.
     * To run a single test, run `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.<name_of_test_method>`, e.g., `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.test_calculation_for_employed`
+    * In case of a test failure, screenshot of the full page will be saved to the `screenshots` directory.
+    
  

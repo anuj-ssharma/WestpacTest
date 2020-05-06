@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import unittest
 from parameterized import parameterized
 from selenium import webdriver
@@ -102,6 +103,8 @@ class KiwiSaverCalculator(unittest.TestCase):
             if error:
                 S = lambda X: self.driver.execute_script('return document.body.parentNode.scroll' + X)
                 self.driver.set_window_size(S('Width'), S('Height'))
+                if not os.path.exists("screenshots"):
+                    os.makedirs("screenshots")
                 filename = "{}-{}".format(self._testMethodName,datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
                 self.driver.find_element_by_tag_name('body').screenshot('screenshots/{}.png'.format(filename))
         self.driver.close()
