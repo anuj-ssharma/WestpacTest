@@ -62,22 +62,18 @@ class KSCalcPageElement():
         """
         :return: Information icon for the field on the page
         """
-        WebDriverWait(self.driver, 20).until(
+        element = WebDriverWait(self.driver, 20).until(
                 lambda driver: self.driver.find_element_by_css_selector(
                         ".wpnib-field-{} div.field-info button".format(self.field_name)))
-        element = self.driver.find_element_by_css_selector(
-            ".wpnib-field-{} div.field-info button".format(self.field_name))
         return element
 
     def info_text(self):
         """
         :return: Information icon text for the field on the page.
         """
-        WebDriverWait(self.driver, 20).until(
+        element = WebDriverWait(self.driver, 20).until(
                 lambda driver: self.driver.find_element_by_css_selector(
                         "div.wpnib-field-{}.field-group div.message-info p".format(self.field_name)))
-        element = self.driver.find_element_by_css_selector(
-                "div.wpnib-field-{}.field-group div.message-info p".format(self.field_name))
         return element.text
 
     def set_field_value(self, value):
@@ -88,8 +84,10 @@ class KSCalcPageElement():
         """
         WebDriverWait(self.driver, 20).until(
                 lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name)))
-        self.driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name)).clear()
-        self.driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name)).send_keys(value)
+        WebDriverWait(self.driver, 20).until(
+                lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name))).clear()
+        WebDriverWait(self.driver, 20).until(
+                lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name))).send_keys(value)
 
     def element(self):
         """
