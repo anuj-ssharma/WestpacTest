@@ -1,23 +1,12 @@
 dist: xenial
+sudo: required
 language: python
 python:
   - 3.8
-before_install:
-  - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update
-  - wget -N http://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_linux64.zip -P ~/
-  - unzip ~/chromedriver_linux64.zip -d ~/
-  - rm ~/chromedriver_linux64.zip
-  - sudo cp -f ~/chromedriver /usr/bin
-  - sudo chmod ugo+rx /usr/bin/chromedriver
-  - sudo apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
-  - sudo apt-get -y --allow-unauthenticated install google-chrome-stable
-  - sudo apt-get -y install xvfb gtk2-engines-pixbuf
-  - sudo apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
-  - sudo apt-get -y install imagemagick x11-apps
-  - echo "Starting X virtual framebuffer (Xvfb) in background..."
-  - Xvfb -ac :99 -screen 0 1280x1024x16 &
-  - export DISPLAY=:99
+addons:
+  chrome: stable
+services:
+  - xvfb
 install:
   - python --version
   - pip install -r requirements.txt
@@ -26,4 +15,4 @@ script:
   - whereis google-chrome-stable
   - google-chrome-stable --version
   - whereis chromedriver
-  - python -m unittest discover -v
+  - python -m unittest -v test.test_kiwisaver.KiwiSaverCalculator

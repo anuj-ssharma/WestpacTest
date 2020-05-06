@@ -27,5 +27,6 @@
 4. Within the project directory, run `python -m unittest test\test_kiwisaver.py` to run all tests.
     * To run a single test, run `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.<name_of_test_method>`, e.g., `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.test_calculation_for_employed`
     * In case of a test failure, screenshot of the full page will be saved to the `screenshots` directory.
+    * By default, the tests will run in non-headless mode. 
     
  
