@@ -1,10 +1,10 @@
 from datetime import datetime
-import os
 import unittest
 from parameterized import parameterized
 from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+
 from pages.kiwisaver_calculator import KiwiSaverCalcPage, KSCalcPageElement
 
 class KiwiSaverCalculator(unittest.TestCase):
@@ -14,12 +14,11 @@ class KiwiSaverCalculator(unittest.TestCase):
         Validate that the correct page is loaded by verifying the title of the page.
         :return:
         """
-        ff_options = Options()
-        ff_options.add_argument("--headless")
-        ff_options.add_argument("--no-sandbox")
-        ff_options.add_argument("--headless")
-        ff_options.add_argument("disable-gpu")
-        self.driver = webdriver.Firefox(options=ff_options)
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("disable-gpu")
+        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
 
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
