@@ -22,18 +22,18 @@ class KiwiSaverCalcPage():
     def enter_details(self, current_age, emp_status, pir, risk_profile, current_balance=None, vol_contribs_amount=None, vol_contribs_frequency=None, annual_income=None, member_contrib=None, savings_goal=None):
         KSCalcPageElement(driver=self.driver, field_name="current-age").set_field_value(current_age)
         KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown_value(emp_status)
-        KSCalcPageElement(driver=self.driver, field_name="pir-rate").select_dropdown_value(pir)
-        KSCalcPageElement(driver=self.driver, field_name="risk-profile").select_radio_button(risk_profile)
-        # Optional fields
-        if current_balance is not None:
-            KSCalcPageElement(driver=self.driver, field_name="kiwi-saver-balance").set_field_value(current_balance)
-        if vol_contribs_amount is not None:
-            KSCalcPageElement(driver=self.driver, field_name="voluntary-contributions").set_field_value(vol_contribs_amount)
-            KSCalcPageElement(driver=self.driver, field_name="voluntary-contributions").select_dropdown_value(vol_contribs_frequency)
         if annual_income is not None:
             KSCalcPageElement(driver=self.driver, field_name="annual-income").set_field_value(annual_income)
         if member_contrib is not None:
             KSCalcPageElement(driver=self.driver, field_name="kiwisaver-member-contribution").select_radio_button(member_contrib)
+        KSCalcPageElement(driver=self.driver, field_name="pir-rate").select_dropdown_value(pir)
+        if current_balance is not None:
+            KSCalcPageElement(driver=self.driver, field_name="kiwi-saver-balance").set_field_value(current_balance)
+
+        if vol_contribs_amount is not None:
+            KSCalcPageElement(driver=self.driver, field_name="voluntary-contributions").set_field_value(vol_contribs_amount)
+            KSCalcPageElement(driver=self.driver, field_name="voluntary-contributions").select_dropdown_value(vol_contribs_frequency)
+        KSCalcPageElement(driver=self.driver, field_name="risk-profile").select_radio_button(risk_profile)
         if savings_goal is not None:
             KSCalcPageElement(driver=self.driver, field_name="savings-goal").set_field_value(savings_goal)
 
