@@ -14,7 +14,7 @@ class KiwiSaverCalculator(unittest.TestCase):
 
     def setUp(self) -> None:
         """
-        Load Chromedriver and go to the Kiwisaver calculator page.
+        Load the relevant driver based on env var set and go to the Kiwisaver calculator page.
         Validate that the correct page is loaded by verifying the title of the page.
         :return:
         """
@@ -22,16 +22,14 @@ class KiwiSaverCalculator(unittest.TestCase):
         if browser == "chrome":
             options = ChromeOptions()
             exe = ChromeDriverManager().install()
+            self.driver = webdriver.Chrome(executable_path=exe, options=self.browser_options(options))
         elif browser == "firefox":
             options = FFOptions()
             exe = GeckoDriverManager().install()
+            self.driver = webdriver.Firefox(executable_path=exe, options=self.browser_options(options))
         else:
             sys.stderr.write("\nPlease enter a valid value for BROWSER i.e. chrome or firefox\n")
             sys.exit(1)
-        options.add_argument("--no-sandbox")
-        options.add_argument("disable-gpu")
-
-        self.driver = webdriver.Chrome(executable_path=exe, options=options)
 
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
@@ -39,6 +37,9 @@ class KiwiSaverCalculator(unittest.TestCase):
         # Switch to the iframe that contains all the calculation fields.
         self.kiwisaver_calc_page.switch_to_calculator()
 
+    def browser_options(self, options):
+        options.add_argument("--no-sandbox")
+        options.add_argument("disable-gpu")
 
     @parameterized.expand([
     ["current_age", "current-age", "This calculator has an age limit of 84 years old."],
