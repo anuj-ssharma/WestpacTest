@@ -18,8 +18,7 @@ install:
   - python --version
   - pip install -r requirements.txt
 env:
-  - BROWSER=chrome
-  - headless=1
+  - BROWSER=chrome headless=1
 script:
   - set -e
   - whereis google-chrome-stable
