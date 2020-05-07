@@ -21,8 +21,8 @@ class KiwiSaverCalculator(unittest.TestCase):
         browser = os.environ['BROWSER']
         if browser == "chrome":
             chrome_options = ChromeOptions()
-            # if os.environ['HEADLESS'] == 1:
-            chrome_options.add_argument("--headless")
+            if str(os.environ['HEADLESS']) == "1":
+                chrome_options.add_argument("--headless")
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-gpu")
             chrome_options.add_argument("--log-path=chromedriver.log")
@@ -32,8 +32,8 @@ class KiwiSaverCalculator(unittest.TestCase):
             print(chrome_options)
         elif browser == "firefox":
             ff_options = FFOptions()
-            # if os.environ['HEADLESS'] == 1:
-            # ff_options.add_argument("--headless")
+            if str(os.environ['HEADLESS']) == "1":
+                ff_options.add_argument("--headless")
             # ff_options.add_argument("--start-maximized")
             # ff_options.add_argument("--disable-gpu")
             ff_options.add_argument("--verbose")
