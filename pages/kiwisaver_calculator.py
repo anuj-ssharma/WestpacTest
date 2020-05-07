@@ -12,7 +12,7 @@ class KiwiSaverCalcPage():
 
     def load(self):
         self.driver.get(self.url)
-        WebDriverWait(self.driver, 30).until(
+        WebDriverWait(self.driver, 50).until(
                 EC.invisibility_of_element_located((By.CSS_SELECTOR, "div#widget-loading-mask")))
 
     def is_title_matches(self):
@@ -64,7 +64,7 @@ class KSCalcPageElement():
     def wait_for_element_to_be_visible(self, css_locator):
         self.wait_for_loading_widget()
 
-        element = WebDriverWait(self.driver, 30).until \
+        element = WebDriverWait(self.driver, 50).until \
             (EC.visibility_of_element_located(
                     (By.CSS_SELECTOR, css_locator)))
         return element
@@ -72,7 +72,7 @@ class KSCalcPageElement():
     def wait_for_elements_to_be_visible(self, css_locator):
         self.wait_for_loading_widget()
 
-        elements = WebDriverWait(self.driver, 30).until \
+        elements = WebDriverWait(self.driver, 50).until \
             (EC.visibility_of_any_elements_located(
                     (By.CSS_SELECTOR, css_locator)))
         return elements
