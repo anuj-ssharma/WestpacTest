@@ -31,6 +31,7 @@ class KiwiSaverCalculator(unittest.TestCase):
             sys.stderr.write("\nPlease enter a valid value for BROWSER i.e. chrome or firefox\n")
             sys.exit(1)
 
+        self.driver.maximize_window()
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
         assert self.kiwisaver_calc_page.is_title_matches(), "Could not load Kiwisaver Calculator page"
