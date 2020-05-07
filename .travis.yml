@@ -17,9 +17,12 @@ services:
 install:
   - python --version
   - pip install -r requirements.txt
+env:
+  - BROWSER=chrome
+  - headless=1
 script:
   - set -e
   - whereis google-chrome-stable
   - google-chrome-stable --version
   - whereis chromedriver
-  - BROWSER=chrome python -m unittest -v test.test_kiwisaver.KiwiSaverCalculator
+  - python -m unittest -v test.test_kiwisaver.KiwiSaverCalculator
