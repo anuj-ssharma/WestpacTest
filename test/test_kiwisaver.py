@@ -29,13 +29,13 @@ class KiwiSaverCalculator(unittest.TestCase):
             chrome_options.add_argument("--verbose")
             exe = ChromeDriverManager().install()
             self.driver = webdriver.Chrome(executable_path=exe, options=chrome_options)
-            print(chrome_options)
         elif browser == "firefox":
             ff_options = FFOptions()
             if str(os.environ['HEADLESS']) == "1":
                 ff_options.add_argument("--headless")
-            # ff_options.add_argument("--start-maximized")
-            # ff_options.add_argument("--disable-gpu")
+            ff_options.add_argument("--start-maximized")
+            ff_options.add_argument("--no-sandbox")
+            ff_options.add_argument("--disable-gpu")
             ff_options.add_argument("--verbose")
             ff_options.add_argument("--shm-size=2g")
             exe = GeckoDriverManager().install()
