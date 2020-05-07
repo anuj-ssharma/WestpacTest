@@ -20,36 +20,36 @@ class KiwiSaverCalculator(unittest.TestCase):
         """
         browser = os.environ['BROWSER']
         if browser == "chrome":
-            chrome_options = ChromeOptions()
-            if str(os.environ['HEADLESS']) == "1":
-                chrome_options.add_argument("--headless")
-            chrome_options.add_argument("--no-sandbox")
-            chrome_options.add_argument("--disable-gpu")
-            chrome_options.add_argument("--log-path=chromedriver.log")
-            chrome_options.add_argument("--verbose")
-            exe = ChromeDriverManager().install()
-            self.driver = webdriver.Chrome(executable_path=exe, options=chrome_options)
+            self.set_chrome_options()
         elif browser == "firefox":
-            ff_options = FFOptions()
-            if str(os.environ['HEADLESS']) == "1":
-                ff_options.add_argument("--headless")
-            ff_options.add_argument("--start-maximized")
-            ff_options.add_argument("--no-sandbox")
-            ff_options.add_argument("--disable-gpu")
-            ff_options.add_argument("--verbose")
-            ff_options.add_argument("--shm-size=2g")
-            exe = GeckoDriverManager().install()
-            self.driver = webdriver.Firefox(executable_path=exe, options=ff_options)
+            self.set_ff_options()
         else:
             sys.stderr.write("\nPlease enter a valid value for BROWSER i.e. chrome or firefox\n")
             sys.exit(1)
 
-        # self.driver.maximize_window()
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
         assert self.kiwisaver_calc_page.is_title_matches(), "Could not load Kiwisaver Calculator page"
         # Switch to the iframe that contains all the calculation fields.
         self.kiwisaver_calc_page.switch_to_calculator()
+
+    def set_ff_options(self):
+        ff_options = FFOptions()
+        if str(os.environ['HEADLESS']) == "1":
+            ff_options.add_argument("--headless")
+        exe = GeckoDriverManager().install()
+        self.driver = webdriver.Firefox(executable_path=exe, options=ff_options)
+
+    def set_chrome_options(self):
+        chrome_options = ChromeOptions()
+        if str(os.environ['HEADLESS']) == "1":
+            chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--log-path=chromedriver.log")
+        chrome_options.add_argument("--verbose")
+        exe = ChromeDriverManager().install()
+        self.driver = webdriver.Chrome(executable_path=exe, options=chrome_options)
 
     @parameterized.expand([
     ["employment_status", "employment-status",

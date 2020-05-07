@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
 class KiwiSaverCalcPage():
     """
@@ -12,7 +13,7 @@ class KiwiSaverCalcPage():
 
     def load(self):
         self.driver.get(self.url)
-        WebDriverWait(self.driver, 50).until(
+        WebDriverWait(self.driver, 20).until(
                 EC.invisibility_of_element_located((By.CSS_SELECTOR, "div#widget-loading-mask")))
 
     def is_title_matches(self):
@@ -41,8 +42,13 @@ class KiwiSaverCalcPage():
             KSCalcPageElement(driver=self.driver, field_name="savings-goal").set_field_value(savings_goal)
 
     def view_projections(self):
-        results_btn = KSCalcPageElement(driver=self.driver, css_locator="button.btn-results-reveal").element()
-        results_btn.click()
+        if os.environ['BROWSER'] == "firefox":
+            results_btn = WebDriverWait(self.driver, 100).until(
+                lambda driver: driver.find_element_by_css_selector("button.btn-results-reveal"))
+            self.driver.execute_script("arguments[0].click();", results_btn)
+        else:
+            results_btn = KSCalcPageElement(driver=self.driver, css_locator="button.btn-results-reveal").element()
+            results_btn.click()
 
 
 
@@ -64,7 +70,7 @@ class KSCalcPageElement():
     def wait_for_element_to_be_visible(self, css_locator):
         self.wait_for_loading_widget()
 
-        element = WebDriverWait(self.driver, 50).until \
+        element = WebDriverWait(self.driver, 20).until \
             (EC.visibility_of_element_located(
                     (By.CSS_SELECTOR, css_locator)))
         return element
@@ -72,7 +78,7 @@ class KSCalcPageElement():
     def wait_for_elements_to_be_visible(self, css_locator):
         self.wait_for_loading_widget()
 
-        elements = WebDriverWait(self.driver, 50).until \
+        elements = WebDriverWait(self.driver, 20).until \
             (EC.visibility_of_any_elements_located(
                     (By.CSS_SELECTOR, css_locator)))
         return elements
