@@ -20,34 +20,41 @@ class KiwiSaverCalculator(unittest.TestCase):
         """
         browser = os.environ['BROWSER']
         if browser == "chrome":
-            options = ChromeOptions()
+            chrome_options = ChromeOptions()
+            # if os.environ['HEADLESS'] == 1:
+            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--no-sandbox")
+            chrome_options.add_argument("--disable-gpu")
+            chrome_options.add_argument("--log-path=chromedriver.log")
+            chrome_options.add_argument("--verbose")
             exe = ChromeDriverManager().install()
-            self.driver = webdriver.Chrome(executable_path=exe, options=self.browser_options(options))
+            self.driver = webdriver.Chrome(executable_path=exe, options=chrome_options)
+            print(chrome_options)
         elif browser == "firefox":
-            options = FFOptions()
+            ff_options = FFOptions()
+            # if os.environ['HEADLESS'] == 1:
+            # ff_options.add_argument("--headless")
+            # ff_options.add_argument("--start-maximized")
+            # ff_options.add_argument("--disable-gpu")
+            ff_options.add_argument("--verbose")
+            ff_options.add_argument("--shm-size=2g")
             exe = GeckoDriverManager().install()
-            self.driver = webdriver.Firefox(executable_path=exe, options=self.browser_options(options))
+            self.driver = webdriver.Firefox(executable_path=exe, options=ff_options)
         else:
             sys.stderr.write("\nPlease enter a valid value for BROWSER i.e. chrome or firefox\n")
             sys.exit(1)
 
-        self.driver.maximize_window()
+        # self.driver.maximize_window()
         self.kiwisaver_calc_page = KiwiSaverCalcPage(self.driver)
         self.kiwisaver_calc_page.load()
         assert self.kiwisaver_calc_page.is_title_matches(), "Could not load Kiwisaver Calculator page"
         # Switch to the iframe that contains all the calculation fields.
         self.kiwisaver_calc_page.switch_to_calculator()
 
-    def browser_options(self, options):
-        options.add_argument("--headless")
-        options.add_argument("window-size=1920x1480")
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument("--no-sandbox")
-        options.add_argument("disable-gpu")
-
     @parameterized.expand([
+    ["employment_status", "employment-status",
+         "If you are earning a salary or wage, select ‘Employed’. Your employer contributions will be automatically calculated at a rate of 3% of your before-tax salary or wages. You can also select ‘Self-employed’ or ‘Not employed’ and then enter below (in the Voluntary contributions field), the amount and frequency of any contributions that you wish to make."],
     ["current_age", "current-age", "This calculator has an age limit of 84 years old."],
-    ["employment_status", "employment-status", "If you are earning a salary or wage, select ‘Employed’. Your employer contributions will be automatically calculated at a rate of 3% of your before-tax salary or wages. You can also select ‘Self-employed’ or ‘Not employed’ and then enter below (in the Voluntary contributions field), the amount and frequency of any contributions that you wish to make."],
     ["pir_rate", "pir-rate", "This is your prescribed investor rate (PIR) for tax purposes. If you don't know what your PIR is, click on the ‘Find My Rate’ button."],
     ["kiwi_saver_balance", "kiwi-saver-balance", "If you do not have a KiwiSaver account, then leave this field blank."],
     ["voluntary_contributions", "voluntary-contributions", "If you are 'Self-Employed' or 'Not employed', you can make direct contributions to your KiwiSaver account. If you are 'Employed', you can make voluntary contributions in addition to your regular employee contributions."],
@@ -66,10 +73,9 @@ class KiwiSaverCalculator(unittest.TestCase):
         if(test_name == "annual_income" or test_name == "member_contrib"):
             # The fields annual income and member contribution are only shown when the user selects
             # the 'Employed' status for Employment status.
-            KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown_value("Employed")
 
+            KSCalcPageElement(driver=self.driver, field_name="employment-status").select_dropdown_value("Employed")
         field = KSCalcPageElement(driver=self.driver, field_name=field_name)
-        self.driver.implicitly_wait(3)
         field.info_icon().click()
         self.assertEqual(field.info_text(), expected_field_info_text)
 
