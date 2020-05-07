@@ -1,5 +1,6 @@
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-
+from selenium.webdriver.support import expected_conditions as EC
 
 class KiwiSaverCalcPage():
     """
@@ -11,6 +12,8 @@ class KiwiSaverCalcPage():
 
     def load(self):
         self.driver.get(self.url)
+        WebDriverWait(self.driver, 20).until(
+                EC.invisibility_of_element_located((By.CSS_SELECTOR, "div#widget-loading-mask")))
 
     def is_title_matches(self):
         return "KiwiSaver Retirement Calculator - Westpac NZ" in self.driver.title
@@ -58,22 +61,43 @@ class KSCalcPageElement():
         self.field_name = field_name
         self.locator = css_locator
 
+    def wait_for_element_to_be_visible(self, css_locator):
+        self.wait_for_loading_widget()
+
+        element = WebDriverWait(self.driver, 20).until \
+            (EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, css_locator)))
+        return element
+
+    def wait_for_elements_to_be_visible(self, css_locator):
+        self.wait_for_loading_widget()
+
+        elements = WebDriverWait(self.driver, 20).until \
+            (EC.visibility_of_any_elements_located(
+                    (By.CSS_SELECTOR, css_locator)))
+        return elements
+
+    def wait_for_loading_widget(self):
+        # Wait for a couple of seconds if the loading widget is visible
+        try:
+            WebDriverWait(self.driver, 2).until(
+                    EC.invisibility_of_element_located((By.CSS_SELECTOR, "div#widget-loading-mask")))
+        except Exception:
+            # We don't want to do anything here
+            pass
+
     def info_icon(self):
         """
         :return: Information icon for the field on the page
         """
-        element = WebDriverWait(self.driver, 20).until(
-                lambda driver: self.driver.find_element_by_css_selector(
-                        ".wpnib-field-{} div.field-info button".format(self.field_name)))
+        element = self.wait_for_element_to_be_visible(".wpnib-field-{} div.field-info button".format(self.field_name))
         return element
 
     def info_text(self):
         """
         :return: Information icon text for the field on the page.
         """
-        element = WebDriverWait(self.driver, 20).until(
-                lambda driver: self.driver.find_element_by_css_selector(
-                        "div.wpnib-field-{}.field-group div.message-info p".format(self.field_name)))
+        element = self.wait_for_element_to_be_visible("div.wpnib-field-{}.field-group div.message-info p".format(self.field_name))
         return element.text
 
     def set_field_value(self, value):
@@ -82,26 +106,22 @@ class KSCalcPageElement():
         :param value:
         :return:
         """
-        WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name)))
-        WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name))).clear()
-        WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} input".format(self.field_name))).send_keys(value)
+        element = self.wait_for_element_to_be_visible(".wpnib-field-{} input".format(self.field_name))
+        element.clear()
+        element.send_keys(value)
 
     def element(self):
         """
         :return: WebDriver element based on the css locator
         """
-        return WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_element_by_css_selector(self.locator))
+        element = self.wait_for_element_to_be_visible(self.locator)
+        return element
 
     def has_element(self):
         """
         :return: True if the element is displayed on the page otherwise False
         """
-        return WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_element_by_css_selector(self.locator).is_displayed())
+        return self.wait_for_element_to_be_visible(self.locator)
 
     def select_dropdown_value(self, option_text):
         """
@@ -109,12 +129,10 @@ class KSCalcPageElement():
         :param option_text: The value to be selected
         :return:
         """
-        element = WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_element_by_css_selector(".wpnib-field-{} div.select-control".format(self.field_name)))
+        element = self.wait_for_element_to_be_visible(".wpnib-field-{} div.select-control".format(self.field_name))
         element.click()
-
-        dropdown_options = WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_elements_by_css_selector(".wpnib-field-{} div.dropdown li".format(self.field_name)))
+        self.wait_for_element_to_be_visible(".wpnib-field-{} div.dropdown ul.option-list".format(self.field_name))
+        dropdown_options = self.driver.find_elements_by_css_selector(".wpnib-field-{} div.dropdown li".format(self.field_name))
         for option in dropdown_options:
             if option.text == option_text:
                 option.click()
@@ -126,9 +144,7 @@ class KSCalcPageElement():
         :param option_to_select: The option text to be selected
         :return: 
         """
-        member_contribution_options = WebDriverWait(self.driver, 20).until(
-                lambda driver: driver.find_elements_by_css_selector(
-                    ".wpnib-field-{} div.radio-control".format(self.field_name)))
+        member_contribution_options = self.wait_for_elements_to_be_visible(".wpnib-field-{} div.radio-control".format(self.field_name))
         for option in member_contribution_options:
             if option.text == option_to_select:
                 option.find_element_by_tag_name("input").click()
