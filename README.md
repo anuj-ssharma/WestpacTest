@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/anuj-ssharma/WestpacTest.svg?branch=master)](https://travis-ci.com/anuj-ssharma/WestpacTest)
+
 # Overview
 * This repository contains the tests requested as part of the technical test from Westpac NZ. 
 * The tests are defined in the `test/test_kiwisaver.py`. There are a total of 12 tests when the suite is executed. 
@@ -15,6 +17,12 @@
         * test_calculation_employed
         * test_calculation_self_employed
         * test_calculation_not_employed
+
+# Running tests on CI 
+
+The tests can be executed on the Travis CI server as well, however this only works for Chrome (at the moment). Click on the `build` button at the top of this
+README page to view the results of the latest execution. 
+
 
 # Running tests locally (Windows x64)
 
