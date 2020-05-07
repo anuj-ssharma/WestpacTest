@@ -35,15 +35,17 @@ class KiwiSaverCalculator(unittest.TestCase):
 
     def set_ff_options(self):
         ff_options = FFOptions()
-        if str(os.environ['HEADLESS']) == "1":
-            ff_options.add_argument("--headless")
+        if "HEADLESS" in os.environ.keys():
+            if str(os.environ['HEADLESS']) == "1":
+                ff_options.add_argument("--headless")
         exe = GeckoDriverManager().install()
         self.driver = webdriver.Firefox(executable_path=exe, options=ff_options)
 
     def set_chrome_options(self):
         chrome_options = ChromeOptions()
-        if str(os.environ['HEADLESS']) == "1":
-            chrome_options.add_argument("--headless")
+        if "HEADLESS" in os.environ.keys():
+            if str(os.environ['HEADLESS']) == "1":
+                chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--log-path=chromedriver.log")

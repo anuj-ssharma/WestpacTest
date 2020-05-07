@@ -34,10 +34,9 @@ The tests are executed on both Firefox and Chrome.
 5. If firefox browser is not already, install from  https://www.mozilla.org/en-US/firefox/new/
 6. Within the project directory,
     * To run on Chrome, run `set BROWSER=chrome` on the command line. To run on Firefox, run `set BROWSER=firefox`
-    * To run headless, run `set HEADLESS=1`.
+    * To run headless, run `set HEADLESS=1` otherwise by default the tests will run in non headless mode.
     * Run `python -m unittest test\test_kiwisaver.py` to run all tests.
     * To run a single test, run `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.<name_of_test_method>`, e.g., `python -m unittest test.test_kiwisaver.KiwiSaverCalculator.test_calculation_for_employed`
     * In case of a test failure, screenshot of the full page will be saved to the `screenshots` directory.
-    * By default, the tests will run in non-headless mode. 
     
  
