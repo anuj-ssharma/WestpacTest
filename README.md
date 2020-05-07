@@ -20,8 +20,8 @@
 
 # Running tests on Travis CI (Linux)
 
-The tests can be executed on the Travis CI server as well, however this only works for Chrome (at the moment). Click on the `build` button at the top of this
-README page to view the results of the latest execution. 
+The tests can be executed on the Travis CI server as well. Click on the `build` button at the top of this README page to view the results of the latest execution. 
+The tests are executed on both Firefox and Chrome. 
 
 
 # Running tests locally (Windows x64)
