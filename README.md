@@ -30,7 +30,8 @@ README page to view the results of the latest execution.
 2. Clone the project `git clone https://github.com/anuj-ssharma/WestpacTest.git`
 3. Within the project root directory, run `pip install -r requirements.txt`. 
     * if pip is not installed, install using the instructions at (https://pip.pypa.io/en/stable/installing/)
-4. If chrome browser is not already installed, install from https://www.google.com/chrome/. Ensure that the chrome browser is on major version 81  
+4. If chrome browser is not already installed, install from https://www.google.com/chrome/. Ensure that the chrome browser is on major version 81
+5. If firefox browser is not already, install from  https://www.mozilla.org/en-US/firefox/new/
 6. Within the project directory,
     * To run on Chrome, run `set BROWSER=chrome` on the command line. To run on Firefox, run `set BROWSER=firefox`
     * To run headless, run `set HEADLESS=1`.
